@@ -37,19 +37,19 @@ def validateFilename(filename):
 
 def validateURL(url):
     try:
-        r = urllib2.urlopen(url)
+        r = requests.get(url)
         count = 1
-        while r.getcode() == 500 and count < 4:
+        while r.status_code == 500 and count < 4:
             print ("Attempt {0} - Status code: {1}. Retrying.".format(count, r.status_code))
             count += 1
-            r = urllib2.urlopen(url)
+            r = requests.get(url)
         sourceFilename = r.headers.get('Content-Disposition')
 
         if sourceFilename:
             ext = os.path.splitext(sourceFilename)[1].replace('"', '').replace(';', '').replace(' ', '')
         else:
             ext = os.path.splitext(url)[1]
-        validURL = r.getcode() == 200
+        validURL = r.status_code == 200
         validFiletype = ext.lower() in ['.csv', '.xls', '.xlsx', '.pdf']
         return validURL, validFiletype
     except:
@@ -89,9 +89,10 @@ errors = 0
 data = []
 
 #### READ HTML 1.0
+import requests
 
-html = urllib2.urlopen(url)
-soup = BeautifulSoup(html, 'lxml')
+html = requests.get(url)
+soup = BeautifulSoup(html.text, 'lxml')
 
 
 #### SCRAPE DATA
