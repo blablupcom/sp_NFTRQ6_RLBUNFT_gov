@@ -10,6 +10,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 
 #### FUNCTIONS 1.0
+import requests
 
 def validateFilename(filename):
     filenameregex = '^[a-zA-Z0-9]+_[a-zA-Z0-9]+_[a-zA-Z0-9]+_[0-9][0-9][0-9][0-9]_[0-9QY][0-9]$'
@@ -87,11 +88,11 @@ entity_id = "NFTRQ6_RLBUNFT_gov"
 url = "https://www.rlbuht.nhs.uk/about-the-trust/our-performance/financial-transparency/"
 errors = 0
 data = []
+proxy = {'http': 'http://185.145.202.171:3128'}
 
 #### READ HTML 1.0
-import requests
 
-html = requests.get(url)
+html = requests.get(url, proxies=proxy)
 soup = BeautifulSoup(html.text, 'lxml')
 
 
